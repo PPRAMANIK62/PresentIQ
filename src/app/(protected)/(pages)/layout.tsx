@@ -1,3 +1,4 @@
+import { getRecentProjects } from "@/actions/project";
 import { onAuthenticateUser } from "@/actions/user";
 import AppSidebar from "@/components/global/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -11,11 +12,11 @@ const Layout = async ({ children }: Props) => {
   const auth = await onAuthenticateUser();
   if (!auth.user) redirect("/sign-in");
 
-  // const recentProjects = getRecentProjects();
+  const recentProjects = await getRecentProjects();
 
   return (
     <SidebarProvider>
-      <AppSidebar user={auth.user}></AppSidebar>
+      <AppSidebar user={auth.user} recentProjects={recentProjects.data} />
     </SidebarProvider>
   );
 };

@@ -11,6 +11,7 @@ import { data } from "@/lib/constants";
 import type { Project, User } from "@prisma/client";
 import React from "react";
 import NavMain from "./nav-main";
+import RecentOpen from "./recent-open";
 
 type Props = {
   recentProjects?: Project[];
@@ -31,7 +32,7 @@ const AppSidebar = ({
       <SidebarHeader className="px-3 pb-0 pt-6">
         <SidebarMenuButton
           size={"lg"}
-          className="data-[state=open]:text-sidebar-accent-foreground"
+          className="gap-x-3 data-[state=open]:text-sidebar-accent-foreground"
         >
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
             <Avatar className="size-10 rounded-full">
@@ -47,6 +48,7 @@ const AppSidebar = ({
 
       <SidebarContent className="mt-10 gap-y-6 px-3">
         <NavMain items={data.navMain} />
+        <RecentOpen recentProjects={recentProjects!} />
       </SidebarContent>
     </Sidebar>
   );
