@@ -1,11 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
+  SidebarContent,
   SidebarHeader,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import type { Project, User } from "@prisma/client";
 import React from "react";
+import NavMain from "./nav-main";
 
 type Props = {
   recentProjects?: Project[];
@@ -39,6 +41,10 @@ const AppSidebar = ({
           </span>
         </SidebarMenuButton>
       </SidebarHeader>
+
+      <SidebarContent className="mt-10 gap-y-6 px-3">
+        <NavMain />
+      </SidebarContent>
     </Sidebar>
   );
 };
