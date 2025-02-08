@@ -1,4 +1,6 @@
 import { onAuthenticateUser } from "@/actions/user";
+import AppSidebar from "@/components/global/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -12,7 +14,11 @@ const Layout = async ({ children }: Props) => {
 
   // const recentProjects = getRecentProjects();
 
-  return <div>{children}</div>;
+  return (
+    <SidebarProvider>
+      <AppSidebar user={auth.user}></AppSidebar>
+    </SidebarProvider>
+  );
 };
 
 export default Layout;
