@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
@@ -5,6 +7,7 @@ import {
   SidebarHeader,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import { data } from "@/lib/constants";
 import type { Project, User } from "@prisma/client";
 import React from "react";
 import NavMain from "./nav-main";
@@ -30,7 +33,7 @@ const AppSidebar = ({
           size={"lg"}
           className="data-[state=open]:text-sidebar-accent-foreground"
         >
-          <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
             <Avatar className="size-10 rounded-full">
               <AvatarImage src="/presentiq.png" alt="presentiq-logo" />
               <AvatarFallback className="rounded-lg">PIQ</AvatarFallback>
@@ -43,7 +46,7 @@ const AppSidebar = ({
       </SidebarHeader>
 
       <SidebarContent className="mt-10 gap-y-6 px-3">
-        <NavMain />
+        <NavMain items={data.navMain} />
       </SidebarContent>
     </Sidebar>
   );

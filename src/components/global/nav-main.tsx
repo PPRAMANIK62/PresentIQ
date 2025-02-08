@@ -7,7 +7,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Clock } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,6 +15,7 @@ type Props = {
     title: string;
     url: string;
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    // icon: string;
     isActive?: boolean;
     items?: {
       title: string;
@@ -24,30 +24,35 @@ type Props = {
   }[];
 };
 
-const NavMain = (props: Props) => {
+const NavMain = ({ items }: Props) => {
   const pathname = usePathname();
 
   return (
     <SidebarGroup className="p-0">
       <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton
-            asChild
-            tooltip={"TEST"}
-            className={cn(pathname.includes("TEST") && "bg-background/80")}
-          >
-            <Link
-              href={"TEST"}
+        {items.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton
+              asChild
+              tooltip={item.title}
               className={cn(
-                "text-lg",
-                pathname.includes("TEST") && "font-bold",
+                pathname.includes(item.url) && "bg-muted",
+                "m-0 py-0",
               )}
             >
-              <Clock className="text-lg" />
-              <span>Test sidebar item</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+              <Link
+                href={item.url}
+                className={cn(
+                  "text-lg",
+                  pathname.includes(item.url) && "font-bold",
+                )}
+              >
+                <item.icon className="text-lg" />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
       </SidebarMenu>
     </SidebarGroup>
   );
