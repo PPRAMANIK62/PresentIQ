@@ -6,7 +6,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "PreseIQ - AI PPT Generator",
+  title: "PresentIQ - AI PPT Generator",
   description: "Build AI powered presentations",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
