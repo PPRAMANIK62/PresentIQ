@@ -1,7 +1,10 @@
 import ThemeSwitcher from "@/components/global/mode-toggle";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { type User } from "@prisma/client";
+import { UploadIcon } from "lucide-react";
+import NewProjectButton from "./new-project-button";
 import SearchBar from "./upper-info-searchbar";
 
 type Props = {
@@ -19,6 +22,12 @@ const UpperInfoBar = ({ children, user }: Props) => {
         <SearchBar />
         {/* TODO: Search Throttling */}
         <ThemeSwitcher />
+        <div className="flex flex-wrap items-center justify-end gap-4">
+          <Button className="cursor-not-allowed rounded-lg bg-primary-80 font-semibold text-primary hover:bg-background-80">
+            <UploadIcon /> Import
+          </Button>
+          <NewProjectButton user={user} />
+        </div>
       </div>
     </header>
   );
