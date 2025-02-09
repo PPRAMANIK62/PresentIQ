@@ -8,13 +8,12 @@ import NewProjectButton from "./new-project-button";
 import SearchBar from "./upper-info-searchbar";
 
 type Props = {
-  children: React.ReactNode;
   user: User;
 };
 
-const UpperInfoBar = ({ children, user }: Props) => {
+const UpperInfoBar = ({ user }: Props) => {
   return (
-    <header className="sticky top-0 z-10 flex shrink-0 flex-wrap items-center justify-between gap-2 bg-background p-4">
+    <header className="sticky top-0 z-10 flex shrink-0 flex-wrap items-center justify-between gap-2 bg-background p-4 lg:p-6">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 h-4" />
 
