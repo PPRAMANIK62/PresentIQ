@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -13,7 +14,6 @@ import { type Slide } from "@/lib/types";
 import { type Project } from "@prisma/client";
 import { type JsonValue } from "@prisma/client/runtime/library";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
 
 type Props = {
   recentProjects: Project[];

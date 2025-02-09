@@ -4,12 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { data } from "@/lib/constants";
 import type { Project, User } from "@prisma/client";
 import React from "react";
+import NavFooter from "./nav-footer";
 import NavMain from "./nav-main";
 import RecentOpen from "./recent-open";
 
@@ -26,7 +28,7 @@ const AppSidebar = ({
   return (
     <Sidebar
       collapsible="icon"
-      className="max-w-[212px] bg-background/90"
+      className="bg-background-90 max-w-[212px]"
       {...props}
     >
       <SidebarHeader className="px-3 pb-0 pt-6">
@@ -50,6 +52,10 @@ const AppSidebar = ({
         <NavMain items={data.navMain} />
         <RecentOpen recentProjects={recentProjects!} />
       </SidebarContent>
+
+      <SidebarFooter>
+        <NavFooter prismaUser={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 };
