@@ -1,7 +1,7 @@
 "use client";
 
 import { useSlideStore } from "@/hooks/use-slide-store";
-import { itemVariants } from "@/lib/constants";
+import { itemVariants, themes } from "@/lib/constants";
 import { type Slide } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { type JsonValue } from "@prisma/client/runtime/library";
@@ -16,6 +16,7 @@ type Props = {
   isDeleted?: boolean;
   slideData: JsonValue;
   src: string;
+  themeName?: string;
 };
 
 const ProjectCard = ({
@@ -25,9 +26,13 @@ const ProjectCard = ({
   isDeleted,
   slideData,
   src,
+  themeName,
 }: Props) => {
   const { setSlides } = useSlideStore();
   const router = useRouter();
+
+  const theme = themes.find((theme) => theme.name === themeName) ?? themes[0]!;
+  // const slides = JSON.parse(JSON.stringify(slideData)) as Slide[];
 
   const handleNavigation = () => {
     setSlides(JSON.parse(JSON.stringify(slideData)) as Slide[]);
@@ -48,7 +53,11 @@ const ProjectCard = ({
         className="relative aspect-[16/10] cursor-pointer overflow-hidden rounded-lg"
         onClick={handleNavigation}
       >
-        <ThumbnailPreview />
+        <ThumbnailPreview
+          theme={theme}
+          // TODO: add slide data
+          // slide={slides[0]!}
+        />
       </div>
     </motion.div>
   );
