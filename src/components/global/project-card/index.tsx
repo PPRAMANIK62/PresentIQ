@@ -2,6 +2,7 @@
 
 import { useSlideStore } from "@/hooks/use-slide-store";
 import { itemVariants, themes } from "@/lib/constants";
+import { timeAgo } from "@/lib/timeAgo";
 import { type Slide } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { type JsonValue } from "@prisma/client/runtime/library";
@@ -58,6 +59,21 @@ const ProjectCard = ({
           // TODO: add slide data
           // slide={slides[0]!}
         />
+      </div>
+      <div className="w-full">
+        <div className="space-y-1">
+          <h3 className="line-clamp-1 text-base font-semibold text-primary">
+            {title}
+          </h3>
+          <div className="flex w-full items-center justify-between gap-2">
+            <p
+              className="text-sm text-muted-foreground"
+              suppressHydrationWarning
+            >
+              {timeAgo(createdAt)}
+            </p>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
