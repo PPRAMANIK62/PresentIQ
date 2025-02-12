@@ -16,7 +16,7 @@ const NewProjectButton = ({ user }: Props) => {
     <Button
       className="rounded-lg font-semibold"
       // disabled={!user.subscription}
-      // onClick={() => {}}
+      onClick={() => router.push("/create-project")}
       // TODO: handle click new project
     >
       <PlusIcon /> New Project

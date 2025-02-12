@@ -135,11 +135,11 @@ const ProjectCard = ({
         className="relative aspect-[16/10] cursor-pointer overflow-hidden rounded-lg"
         onClick={handleNavigation}
       >
-        <ThumbnailPreview
+        {/* <ThumbnailPreview
           theme={theme}
           // TODO: add slide data
           // slide={slides[0]!}
-        />
+        /> */}
       </div>
       <div className="w-full">
         <div className="space-y-1">
