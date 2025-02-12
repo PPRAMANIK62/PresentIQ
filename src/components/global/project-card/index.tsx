@@ -1,5 +1,6 @@
 "use client";
 
+import { recoverProject } from "@/actions/project";
 import AlertDialogBox from "@/components/global/alert-dialog-box";
 import { Button } from "@/components/ui/button";
 import { useSlideStore } from "@/hooks/use-slide-store";
@@ -54,16 +55,34 @@ const ProjectCard = ({
       setLoading(false);
       toast({
         title: "Error",
-        description: "Project not found",
+        description: "Project not found!",
         variant: "destructive",
       });
       return;
     }
 
     try {
+      const res = await recoverProject(projectId);
+      if (res.status !== 200) {
+        toast({
+          title: "Oops!",
+          description: res.error ?? "Something went wrong!",
+          variant: "destructive",
+        });
+      }
+      setOpen(false);
+      router.refresh();
+      toast({
+        title: "Success",
+        description: "Project recovered successfully!",
+      });
     } catch (error) {
       console.error(error);
-      return { status: 500, error: "Internal Server Error" };
+      toast({
+        title: "Oops!",
+        description: "Something went wrong!",
+        variant: "destructive",
+      });
     }
   };
 
@@ -99,27 +118,27 @@ const ProjectCard = ({
             >
               {timeAgo(createdAt)}
             </p>
-            {/* {isDeleted ? ( */}
-            <AlertDialogBox
-              description="This will recover your project and restore your data."
-              className="bg-green-500 text-white hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700"
-              loading={loading}
-              open={open}
-              onClick={handleRecover}
-              handleOpen={() => setOpen(!open)}
-            >
-              <Button
-                size={"sm"}
-                variant={"ghost"}
-                className="bg-background-80 dark:hover:bg-background-70"
-                disabled={loading}
+            {isDeleted ? (
+              <AlertDialogBox
+                description="This will recover your project and restore your data."
+                className="bg-green-500 text-white hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700"
+                loading={loading}
+                open={open}
+                onClick={handleRecover}
+                handleOpen={() => setOpen(!open)}
               >
-                Recover
-              </Button>
-            </AlertDialogBox>
-            {/* ) : ( */}
-            {/* "" */}
-            {/* )} */}
+                <Button
+                  size={"sm"}
+                  variant={"ghost"}
+                  className="bg-background-80 dark:hover:bg-background-70"
+                  disabled={loading}
+                >
+                  Recover
+                </Button>
+              </AlertDialogBox>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
