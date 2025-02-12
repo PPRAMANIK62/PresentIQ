@@ -1,6 +1,6 @@
 "use client";
 
-import { recoverProject } from "@/actions/project";
+import { deleteProject, recoverProject } from "@/actions/project";
 import AlertDialogBox from "@/components/global/alert-dialog-box";
 import { Button } from "@/components/ui/button";
 import { useSlideStore } from "@/hooks/use-slide-store";
@@ -19,10 +19,9 @@ type Props = {
   projectId: string;
   title: string;
   createdAt: string;
+  themeName?: string;
   isDeleted?: boolean;
   slideData: JsonValue;
-  src: string;
-  themeName?: string;
 };
 
 const ProjectCard = ({
@@ -31,7 +30,6 @@ const ProjectCard = ({
   createdAt,
   isDeleted,
   slideData,
-  src,
   themeName,
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -75,6 +73,43 @@ const ProjectCard = ({
       toast({
         title: "Success",
         description: "Project recovered successfully!",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Oops!",
+        description: "Something went wrong!",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    setLoading(true);
+    if (!projectId) {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: "Project not found!",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const res = await deleteProject(projectId);
+      if (res.status !== 200) {
+        toast({
+          title: "Oops!",
+          description: res.error ?? "Something went wrong!",
+          variant: "destructive",
+        });
+      }
+      setOpen(false);
+      router.refresh();
+      toast({
+        title: "Success",
+        description: "Project moved to trash!",
       });
     } catch (error) {
       console.error(error);
@@ -137,7 +172,23 @@ const ProjectCard = ({
                 </Button>
               </AlertDialogBox>
             ) : (
-              ""
+              <AlertDialogBox
+                description="This will delete your project and send to trash."
+                className="bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                loading={loading}
+                open={open}
+                onClick={handleDelete}
+                handleOpen={() => setOpen(!open)}
+              >
+                <Button
+                  size={"sm"}
+                  variant={"ghost"}
+                  className="bg-background-80 dark:hover:bg-background-70"
+                  disabled={loading}
+                >
+                  Move to trash
+                </Button>
+              </AlertDialogBox>
             )}
           </div>
         </div>
