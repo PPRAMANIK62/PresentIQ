@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { usePromptStore } from "@/hooks/use-prompt-store";
 import {
   containerVariants,
   CreatePageCard,
@@ -15,6 +16,8 @@ type Props = {
 };
 
 const CreatePage = ({ onSelectOption }: Props) => {
+  const { prompts } = usePromptStore();
+
   return (
     <motion.div
       variants={containerVariants}
@@ -91,7 +94,7 @@ const CreatePage = ({ onSelectOption }: Props) => {
         ))}
       </motion.div>
 
-      <RecentPrompt />
+      {prompts.length > 0 && <RecentPrompt />}
     </motion.div>
   );
 };
