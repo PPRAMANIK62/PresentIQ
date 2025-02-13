@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useCreativeAIStore } from "@/hooks/use-creative-ai-store";
 import { usePromptStore } from "@/hooks/use-prompt-store";
 import { containerVariants, itemVariants } from "@/lib/constants";
 import { motion } from "framer-motion";
@@ -8,8 +9,16 @@ type Props = {};
 
 const RecentPrompt = (props: Props) => {
   const { prompts, setPage } = usePromptStore();
+  const { addMultipleOutlines, setCurrentAIPrompt } = useCreativeAIStore();
 
-  const handleEdit = (id: string) => {};
+  const handleEdit = (id: string) => {
+    const prompt = prompts.find((prompt) => prompt.id === id);
+    if (prompt) {
+      setPage("creative-ai");
+      addMultipleOutlines(prompt.outlines);
+      setCurrentAIPrompt(prompt.title);
+    }
+  };
 
   return (
     <motion.div variants={containerVariants} className="!mt-20 space-y-4">
