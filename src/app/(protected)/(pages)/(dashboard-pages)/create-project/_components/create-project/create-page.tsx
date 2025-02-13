@@ -8,6 +8,7 @@ import {
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import RecentPrompt from "../generate-ai/recent-prompts";
 
 type Props = {
   onSelectOption: (option: string) => void;
@@ -89,6 +90,8 @@ const CreatePage = ({ onSelectOption }: Props) => {
           </motion.div>
         ))}
       </motion.div>
+
+      <RecentPrompt />
     </motion.div>
   );
 };

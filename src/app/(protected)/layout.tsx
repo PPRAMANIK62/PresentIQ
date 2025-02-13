@@ -1,6 +1,3 @@
-import { onAuthenticateUser } from "@/actions/user";
-import { redirect } from "next/navigation";
-
 export const dynamic = "force-dynamic";
 
 type Props = {
@@ -8,9 +5,6 @@ type Props = {
 };
 
 const Layout = async ({ children }: Props) => {
-  const auth = await onAuthenticateUser();
-  if (!auth.user) redirect("/sign-in");
-
   return <div className="min-h-screen w-full">{children}</div>;
 };
 
