@@ -2,7 +2,7 @@
 
 import { type OutlineCard } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import Card from "./card";
 
 type Props = {
@@ -36,6 +36,8 @@ const CardList = ({
 }: Props) => {
   const [draggedItem, setDraggedItem] = useState<OutlineCard | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const dragOffsetY = useRef<number>(0);
 
   const onDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
@@ -92,6 +94,50 @@ const CardList = ({
     );
   };
 
+  const onDragStart = (e: React.DragEvent, card: OutlineCard) => {
+    setDraggedItem(card);
+    e.dataTransfer.effectAllowed = "move";
+
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    dragOffsetY.current = e.clientY - rect.top;
+
+    const draggedEl = e.currentTarget.cloneNode(true) as HTMLElement;
+    draggedEl.style.position = "absolute";
+    draggedEl.style.top = "-1000px";
+    draggedEl.style.opacity = "0.8";
+    draggedEl.style.width = `${(e.currentTarget as HTMLElement).offsetWidth}px`;
+    document.body.appendChild(draggedEl);
+    e.dataTransfer.setDragImage(draggedEl, 0, dragOffsetY.current);
+
+    setTimeout(() => {
+      setDragOverIndex(outlines.findIndex((c) => c.id === card.id));
+      document.body.removeChild(draggedEl);
+    }, 0);
+  };
+
+  const onDragEnd = () => {
+    setDraggedItem(null);
+    setDragOverIndex(null);
+  };
+
+  const getDragOverStyles = (cardIndex: number) => {
+    if (dragOverIndex === null || draggedItem === null) return {};
+    if (cardIndex === dragOverIndex)
+      return {
+        borderTop: "2px solid #000",
+        marginTop: "0.5rem",
+        transition: "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)",
+      };
+    else if (cardIndex === dragOverIndex - 1)
+      return {
+        borderTop: "2px solid #000",
+        marginTop: "0.5rem",
+        transition: "margin 0.2s cubic-bezier(0.25,0.1,0.25,1)",
+      };
+
+    return {};
+  };
+
   return (
     <motion.div
       className="-my-2 space-y-2"
@@ -127,9 +173,10 @@ const CardList = ({
               onCardDoubleClick={() => onCardDoubleClick(card.id, card.title)}
               onDeleteClick={() => onCardDelete(card.id)}
               dragHandlers={{
-                onDragStart: () => onDragStart(e, card),
+                onDragStart: (e) => onDragStart(e, card),
                 onDragEnd: onDragEnd,
               }}
+              dragOverStyles={getDragOverStyles(idx)}
             />
           </Fragment>
         ))}
