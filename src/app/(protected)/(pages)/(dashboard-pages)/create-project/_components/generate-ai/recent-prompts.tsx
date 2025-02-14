@@ -7,7 +7,7 @@ import { containerVariants, itemVariants } from "@/lib/constants";
 import { timeAgo } from "@/lib/timeAgo";
 import { motion } from "framer-motion";
 
-const RecentPrompt = () => {
+const RecentPrompts = () => {
   const { prompts, setPage } = usePromptStore();
   const { addMultipleOutlines, setCurrentAIPrompt } = useCreativeAIStore();
   const { toast } = useToast();
@@ -68,4 +68,4 @@ const RecentPrompt = () => {
   );
 };
 
-export default RecentPrompt;
+export default RecentPrompts;

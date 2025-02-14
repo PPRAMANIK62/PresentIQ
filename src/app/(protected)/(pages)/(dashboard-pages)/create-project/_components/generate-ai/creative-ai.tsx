@@ -1,3 +1,4 @@
+import { generateCreativePrompt } from "@/actions/generate-ai";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,12 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreativeAIStore } from "@/hooks/use-creative-ai-store";
+import { usePromptStore } from "@/hooks/use-prompt-store";
+import { useToast } from "@/hooks/use-toast";
 import { containerVariants, itemVariants } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { ChevronLeft, Loader2, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CardList from "../common/card-list";
+import RecentPrompts from "./recent-prompts";
 
 type Props = {
   onBack: () => void;
@@ -27,6 +31,7 @@ const CreativeAI = ({ onBack }: Props) => {
   const [editText, setEditText] = useState<string>("");
 
   const router = useRouter();
+  const { toast } = useToast();
   const {
     currentAIPrompt,
     setCurrentAIPrompt,
@@ -35,6 +40,7 @@ const CreativeAI = ({ onBack }: Props) => {
     addOutline,
     addMultipleOutlines,
   } = useCreativeAIStore();
+  const { prompts, addPrompt } = usePromptStore();
 
   const resetCards = () => {
     setEditingCard(null);
@@ -45,8 +51,23 @@ const CreativeAI = ({ onBack }: Props) => {
     resetOutlines();
   };
 
+  const generateOutline = async () => {
+    if (currentAIPrompt === "") {
+      toast({
+        title: "Error",
+        description: "Please enter a prompt to generate an outline.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsGenerating(true);
+
+    // TODO:
+    const res = await generateCreativePrompt(currentAIPrompt);
+  };
+
   // TODO:
-  // const generateOutline = () => {}
+  // const handleGenerate = () => {};
 
   return (
     <motion.div
@@ -120,7 +141,7 @@ const CreativeAI = ({ onBack }: Props) => {
       <div className="flex w-full items-center justify-center">
         <Button
           className="flex items-center gap-2 text-lg font-medium"
-          // onClick={generateOutline}
+          onClick={generateOutline}
           disabled={isGenerating}
         >
           {isGenerating ? (
@@ -150,6 +171,24 @@ const CreativeAI = ({ onBack }: Props) => {
           setEditText(title);
         }}
       />
+
+      {outlines.length > 0 && (
+        <Button
+          className="w-full"
+          // onClick={handleGenerate}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="mr-2 animate-spin" /> Generating...
+            </>
+          ) : (
+            "Generate"
+          )}
+        </Button>
+      )}
+
+      {prompts.length > 0 && <RecentPrompts />}
     </motion.div>
   );
 };
