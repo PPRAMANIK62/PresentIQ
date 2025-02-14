@@ -27,8 +27,14 @@ const CreativeAI = ({ onBack }: Props) => {
   const [editText, setEditText] = useState<string>("");
 
   const router = useRouter();
-  const { currentAIPrompt, setCurrentAIPrompt, outlines, resetOutlines } =
-    useCreativeAIStore();
+  const {
+    currentAIPrompt,
+    setCurrentAIPrompt,
+    outlines,
+    resetOutlines,
+    addOutline,
+    addMultipleOutlines,
+  } = useCreativeAIStore();
 
   const resetCards = () => {
     setEditingCard(null);
@@ -127,7 +133,23 @@ const CreativeAI = ({ onBack }: Props) => {
         </Button>
       </div>
 
-      <CardList />
+      <CardList
+        outlines={outlines}
+        addOutline={addOutline}
+        addMultipleOutlines={addMultipleOutlines}
+        editingCard={editingCard}
+        selectedCard={selectedCard}
+        editText={editText}
+        onEditChange={setEditText}
+        onCardSelect={setSelectedCard}
+        setEditText={setEditText}
+        setEditingCard={setEditingCard}
+        setSelectedCard={setSelectedCard}
+        onCardDoubleClick={(id, title) => {
+          setEditingCard(id);
+          setEditText(title);
+        }}
+      />
     </motion.div>
   );
 };

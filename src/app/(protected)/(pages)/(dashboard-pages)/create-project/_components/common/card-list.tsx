@@ -1,8 +1,9 @@
 "use client";
 
 import { type OutlineCard } from "@/lib/types";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useState } from "react";
+import Card from "./card";
 
 type Props = {
   outlines: OutlineCard[];
@@ -72,6 +73,25 @@ const CardList = ({
     setDragOverIndex(null);
   };
 
+  const onCardUpdate = (id: string, newTitle: string) => {
+    addMultipleOutlines(
+      outlines.map((card) =>
+        card.id === id ? { ...card, title: newTitle } : card,
+      ),
+    );
+    setEditingCard(null);
+    setSelectedCard(null);
+    setEditText("");
+  };
+
+  const onCardDelete = (id: string) => {
+    addMultipleOutlines(
+      outlines
+        .filter((card) => card.id !== id)
+        .map((card, idx) => ({ ...card, order: idx + 1 })),
+    );
+  };
+
   return (
     <motion.div
       className="-my-2 space-y-2"
@@ -88,7 +108,33 @@ const CardList = ({
         e.preventDefault();
         onDrop(e);
       }}
-    ></motion.div>
+    >
+      <AnimatePresence>
+        {outlines.map((card, idx) => (
+          <Fragment key={card.id}>
+            <Card
+              card={card}
+              onDragOver={(e) => onDragOver(e, idx)}
+              isEditing={editingCard === card.id}
+              isSelected={selectedCard === card.id}
+              editText={editText}
+              onEditChange={onEditChange}
+              onEditBlur={() => onCardUpdate(card.id, editText)}
+              onEditKeyDown={(e) => {
+                if (e.key === "Enter") onCardUpdate(card.id, editText);
+              }}
+              onCardClick={() => onCardSelect(card.id)}
+              onCardDoubleClick={() => onCardDoubleClick(card.id, card.title)}
+              onDeleteClick={() => onCardDelete(card.id)}
+              dragHandlers={{
+                onDragStart: () => onDragStart(e, card),
+                onDragEnd: onDragEnd,
+              }}
+            />
+          </Fragment>
+        ))}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
