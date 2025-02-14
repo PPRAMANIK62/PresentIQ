@@ -9,7 +9,6 @@ import {
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 import RecentPrompt from "../generate-ai/recent-prompts";
 
 type Props = {
@@ -18,10 +17,6 @@ type Props = {
 
 const CreatePage = ({ onSelectOption }: Props) => {
   const { prompts, setPage } = usePromptStore();
-
-  useEffect(() => {
-    setPage("create");
-  }, [setPage]);
 
   return (
     <motion.div

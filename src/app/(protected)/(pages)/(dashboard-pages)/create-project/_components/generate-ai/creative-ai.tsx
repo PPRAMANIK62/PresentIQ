@@ -10,9 +10,10 @@ import {
 import { useCreativeAIStore } from "@/hooks/use-creative-ai-store";
 import { containerVariants, itemVariants } from "@/lib/constants";
 import { motion } from "framer-motion";
-import { ChevronLeft, RotateCcw } from "lucide-react";
+import { ChevronLeft, Loader2, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import CardList from "../common/card-list";
 
 type Props = {
   onBack: () => void;
@@ -37,6 +38,9 @@ const CreativeAI = ({ onBack }: Props) => {
     setCurrentAIPrompt("");
     resetOutlines();
   };
+
+  // TODO:
+  // const generateOutline = () => {}
 
   return (
     <motion.div
@@ -107,6 +111,23 @@ const CreativeAI = ({ onBack }: Props) => {
           </div>
         </div>
       </motion.div>
+      <div className="flex w-full items-center justify-center">
+        <Button
+          className="flex items-center gap-2 text-lg font-medium"
+          // onClick={generateOutline}
+          disabled={isGenerating}
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="mr-2 animate-spin" /> Generating...
+            </>
+          ) : (
+            "Generate Outline"
+          )}
+        </Button>
+      </div>
+
+      <CardList />
     </motion.div>
   );
 };
