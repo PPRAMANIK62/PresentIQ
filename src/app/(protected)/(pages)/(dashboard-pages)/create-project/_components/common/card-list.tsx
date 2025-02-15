@@ -3,7 +3,6 @@
 import { type OutlineCard } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fragment, useRef, useState } from "react";
-import AddCardButton from "./add-card-button";
 import Card from "./card";
 
 type Props = {
@@ -180,10 +179,8 @@ const CardList = ({
               dragOverStyles={getDragOverStyles(idx)}
             />
 
-            <AddCardButton
-            // TODO:
-            // onAddCard={() => onAddCard(idx)}
-            />
+            {/* TODO: */}
+            {/* <AddCardButton onAddCard={() => onAddCard(idx)} /> */}
           </Fragment>
         ))}
       </AnimatePresence>

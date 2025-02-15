@@ -1,5 +1,6 @@
 "use server";
 
+import { type OutlineCard } from "@/lib/types";
 import { db } from "@/server/db";
 import { onAuthenticateUser } from "./user";
 
@@ -94,6 +95,35 @@ export const deleteProject = async (projectId: string) => {
     }
 
     return { status: 200, data: updatedProject };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, error: "Internal Server Error" };
+  }
+};
+
+export const createProject = async (title: string, outlines: OutlineCard[]) => {
+  try {
+    if (!title || !outlines || outlines.length === 0)
+      return { status: 400, error: "Title and outlines are required!" };
+
+    const checkUser = await onAuthenticateUser();
+    if (checkUser?.status !== 200 || !checkUser.user) {
+      return { status: 403, error: "User not authenticated!" };
+    }
+
+    const allOutlines = outlines.map((outline) => outline.title);
+
+    const project = await db.project.create({
+      data: {
+        title,
+        outlines: allOutlines,
+        createdAt: new Date(),
+        userId: checkUser.user.id,
+      },
+    });
+    if (!project) return { status: 500, error: "Failed to create project" };
+
+    return { status: 200, data: project };
   } catch (error) {
     console.error(error);
     return { status: 500, error: "Internal Server Error" };
