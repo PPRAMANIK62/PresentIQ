@@ -3,6 +3,8 @@
 import { type OutlineCard } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fragment, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import AddCardButton from "./add-card-button";
 import Card from "./card";
 
 type Props = {
@@ -138,6 +140,28 @@ const CardList = ({
     return {};
   };
 
+  const onAddCard = (index?: number) => {
+    const newCard: OutlineCard = {
+      id: uuidv4(),
+      title: editText || "New Section",
+      order: (index !== undefined ? index + 1 : outlines.length) + 1,
+    };
+
+    const updatedCards =
+      index !== undefined
+        ? [
+            ...outlines.slice(0, index + 1),
+            newCard,
+            ...outlines
+              .slice(index + 1)
+              .map((card) => ({ ...card, order: card.order + 1 })),
+          ]
+        : [...outlines, newCard];
+
+    addMultipleOutlines(updatedCards);
+    setEditText("");
+  };
+
   return (
     <motion.div
       className="-my-2 space-y-2"
@@ -180,7 +204,9 @@ const CardList = ({
             />
 
             {/* TODO: */}
-            {/* <AddCardButton onAddCard={() => onAddCard(idx)} /> */}
+            {card.order < outlines.length && (
+              <AddCardButton onAddCard={() => onAddCard(idx)} />
+            )}
           </Fragment>
         ))}
       </AnimatePresence>
